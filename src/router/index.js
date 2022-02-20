@@ -20,6 +20,11 @@ const routes = [
     name: "Form Plus",
     component: () => import("../views/form-plus/index.vue"),
   },
+  {
+    path: "/dialog-form",
+    name: "Dialog Form",
+    component: () => import("../views/dialog-form/index.vue"),
+  },
 ];
 
 const router = new VueRouter({

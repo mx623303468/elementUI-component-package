@@ -57,6 +57,7 @@
 import cloneDeep from "lodash/cloneDeep";
 
 export default {
+  name: "FormPlus",
   props: {
     options: {
       required: true,

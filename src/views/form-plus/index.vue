@@ -10,12 +10,12 @@
 </template>
 
 <script>
-import FormPlus from "@/components/FormPlus.vue";
+// import FormPlus from "@/components/FormPlus.vue";
 
 export default {
-  components: {
-    FormPlus,
-  },
+  // components: {
+  //   FormPlus,
+  // },
   data() {
     return {
       formOptions: [
@@ -167,12 +167,12 @@ export default {
       form.validate((valid) => {
         if (!valid) return false;
         console.log(model);
-        this.$message.success('校验通过')
+        this.$message.success("校验通过");
       });
     },
     resetForm({ form }) {
       form.resetFields();
-      this.$message.success('重置成功')
+      this.$message.success("重置成功");
     },
   },
 };
