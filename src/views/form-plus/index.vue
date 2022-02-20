@@ -1,6 +1,11 @@
 <template>
   <div class="form-plus">
-    <form-plus :options="formOptions" label-width="100px"></form-plus>
+    <form-plus :options="formOptions" label-width="100px">
+      <template #action="scope">
+        <el-button type="primary" @click="submitForm(scope)">提交</el-button>
+        <el-button @click="resetForm(scope)">重置</el-button>
+      </template>
+    </form-plus>
   </div>
 </template>
 
@@ -143,9 +148,32 @@ export default {
           value: "",
           label: "switch",
           prop: "switch",
+          attrs: {
+            activeText: "打开",
+            inactiveText: "关闭",
+            disabled: false,
+          },
         },
       ],
     };
+  },
+  mounted() {
+    // setTimeout(() => {
+    //   this.formOptions[6].attrs.disabled = true
+    // }, 3000);
+  },
+  methods: {
+    submitForm({ form, model }) {
+      form.validate((valid) => {
+        if (!valid) return false;
+        console.log(model);
+        this.$message.success('校验通过')
+      });
+    },
+    resetForm({ form }) {
+      form.resetFields();
+      this.$message.success('重置成功')
+    },
   },
 };
 </script>

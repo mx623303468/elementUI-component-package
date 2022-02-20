@@ -1,5 +1,13 @@
 <template>
-  <el-form :model="model" :rules="rules" v-bind="$attrs">
+  <!-- model 有值时才显示 -->
+  <el-form
+    v-if="model"
+    ref="form"
+    :model="model"
+    :rules="rules"
+    v-bind="$attrs"
+    :validate-on-rule-change="false"
+  >
     <template v-for="(item, index) in options">
       <!-- 没有子节点 -->
       <el-form-item
@@ -10,7 +18,7 @@
       >
         <component
           :is="item.component"
-          v-model="item.value"
+          v-model="model[item.prop]"
           v-bind="item.attrs"
         ></component>
       </el-form-item>
@@ -24,7 +32,7 @@
       >
         <component
           :is="item.component"
-          v-model="item.value"
+          v-model="model[item.prop]"
           v-bind="item.attrs"
         >
           <component
@@ -37,29 +45,63 @@
         </component>
       </el-form-item>
     </template>
+
+    <!-- 操作项 -->
+    <el-form-item>
+      <slot name="action" :form="form" :model="model"></slot>
+    </el-form-item>
   </el-form>
 </template>
 
 <script>
+import cloneDeep from "lodash/cloneDeep";
+
 export default {
   props: {
     options: {
+      required: true,
       type: Array,
       default: () => [],
     },
   },
-  computed: {
-    model() {
-      return this.options.reduce((previous, current) => {
-        previous[current.prop] = current.value;
-        return previous;
-      }, {});
+  data() {
+    return {
+      form: null,
+      model: null, // 初始值一定要为 null 防止无法访问属性值
+      rules: null,
+    };
+  },
+  watch: {
+    // 父组件动态改变表单配置时，重新渲染
+    options: {
+      deep: true,
+      handler() {
+        this.initForm();
+      },
     },
-    rules() {
-      return this.options.reduce((previous, current) => {
-        previous[current.prop] = current.rules;
-        return previous;
-      }, {});
+  },
+  mounted() {
+    this.initForm();
+  },
+  methods: {
+    initForm() {
+      if (this.options && this.options.length) {
+        let m = {},
+          r = {};
+        this.options.map((item) => {
+          m[item.prop] = item.value;
+          r[item.prop] = item.rules;
+        });
+
+        // 深拷贝 解决重置表单
+        this.model = cloneDeep(m);
+        this.rules = cloneDeep(r);
+
+        // 防止获取不到 form
+        this.$nextTick(() => {
+          this.form = this.$refs.form;
+        });
+      }
     },
   },
 };
