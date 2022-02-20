@@ -1,36 +1,50 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png" />
-    <div>
-      <p>
-        If Element is successfully added to this project, you'll see an
-        <code v-text="'<el-button>'"></code>
-        below
-      </p>
-      <el-button>el-button</el-button>
+    <div class="nav">
+      <el-button-group>
+        <el-button
+          type="primary"
+          v-for="button in buttons"
+          :key="button.text"
+          @click="$router.push({ name: button.text })"
+          >{{ button.text }}</el-button
+        >
+      </el-button-group>
+      <h2>{{ $route.name }}</h2>
     </div>
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <div class="content">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
-
+import router from "./router";
 export default {
   name: "app",
-  components: {
-    HelloWorld,
+  data() {
+    return {
+      buttons: [],
+    };
+  },
+  mounted() {
+    this.generateButtons(router.options.routes);
+  },
+  methods: {
+    generateButtons(data) {
+      data.map((item) => {
+        this.buttons.push({ text: item.name });
+        if (item.children) {
+          this.generateButtons(item.children);
+        }
+      });
+    },
   },
 };
 </script>
 
-<style>
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+<style lang="scss" scoped>
+.nav {
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
