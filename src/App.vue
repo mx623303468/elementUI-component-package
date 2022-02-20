@@ -6,7 +6,7 @@
           type="primary"
           v-for="button in buttons"
           :key="button.text"
-          @click="$router.push({ name: button.text })"
+          @click="handleClick(button.text)"
           >{{ button.text }}</el-button
         >
       </el-button-group>
@@ -38,6 +38,11 @@ export default {
           this.generateButtons(item.children);
         }
       });
+    },
+    handleClick(name) {
+      if (this.$route.name !== name) {
+        this.$router.push({ name });
+      }
     },
   },
 };
