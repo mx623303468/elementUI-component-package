@@ -4,10 +4,8 @@
 
 <script>
 export default {
-  name: 'DialogForm'
-}
+  name: "DialogForm",
+};
 </script>
 
-<style>
-
-</style>
+<style></style>
