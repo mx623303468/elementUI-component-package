@@ -87,8 +87,8 @@ export default {
   methods: {
     initForm() {
       if (this.options && this.options.length) {
-        let m = {},
-          r = {};
+        const m = {};
+        const r = {};
         this.options.map((item) => {
           m[item.prop] = item.value;
           r[item.prop] = item.rules;
